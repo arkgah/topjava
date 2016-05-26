@@ -54,7 +54,7 @@ public class UserMealsUtil {
                 mapDate2Calories.put(localDate, mapDate2Calories.get(localDate) + meal.getCalories());
             }
 
-            if (localTime.isAfter(startTime) && localTime.isBefore(endTime)) {
+            if (TimeUtil.isBetween(localTime, startTime, endTime)) {
                 if (!mapDate2MealFilter.containsKey(localDate)) {
                     mapDate2MealFilter.put(localDate, new ArrayList<>());
                 }
