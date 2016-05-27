@@ -58,8 +58,8 @@ public class UserMealsUtil {
                         mapCaloriesByDate.get(e.getDateTime().toLocalDate()) > caloriesPerDay ? true : false))
                 .collect(Collectors.toList());
 
-        return result;
-    }
+    return result;
+}
 
     private static <K, V> AbstractMap.Entry<K, V> pair(K k, V v) {
         return new AbstractMap.SimpleImmutableEntry<K, V>(k, v);
