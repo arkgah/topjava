@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -41,41 +42,27 @@ public class UserMealsUtil {
      * @return
      */
     public static List<UserMealWithExceed> getFilteredMealsWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        List<UserMealWithExceed> result = new ArrayList<>();
-        Map<LocalDate, Integer> mapDate2Calories = new HashMap<>();
-        Map<LocalDate, List<UserMeal>> mapDate2MealFilter = new HashMap<>();
 
-        for (UserMeal meal : mealList) {
-            LocalDate localDate = meal.getDateTime().toLocalDate();
-            LocalTime localTime = meal.getDateTime().toLocalTime();
-            if (!mapDate2Calories.containsKey(localDate)) {
-                mapDate2Calories.put(localDate, meal.getCalories());
-            } else {
-                mapDate2Calories.put(localDate, mapDate2Calories.get(localDate) + meal.getCalories());
-            }
+        // Count the calories per a day basis
+        Map<LocalDate, Integer> mapCaloriesByDate = mealList
+                .stream()
+                .map(e -> pair(e.getDateTime().toLocalDate(), e.getCalories()))
+                .collect(Collectors.groupingBy(
+                        java.util.Map.Entry::getKey,
+                        Collectors.summingInt(java.util.Map.Entry::getValue)));
 
-            if (TimeUtil.isBetween(localTime, startTime, endTime)) {
-                if (!mapDate2MealFilter.containsKey(localDate)) {
-                    mapDate2MealFilter.put(localDate, new ArrayList<>());
-                }
-                mapDate2MealFilter.get(localDate).add(meal);
-            }
-        }
+        List<UserMealWithExceed> result = mealList
+                .stream()
+                .filter(e -> TimeUtil.isBetween(e.getDateTime().toLocalTime(), startTime, endTime))
+                .map(e -> new UserMealWithExceed(e.getDateTime(), e.getDescription(), e.getCalories(),
+                        mapCaloriesByDate.get(e.getDateTime().toLocalDate()) > caloriesPerDay ? true : false))
+                .collect(Collectors.toList());
 
-        for (LocalDate localDate : mapDate2MealFilter.keySet()) {
-            boolean exceeded = false;
-            if (mapDate2Calories.get(localDate) > caloriesPerDay) {
-                exceeded = true;
-            } else {
-                exceeded = false;
-            }
-
-            for (UserMeal meal : mapDate2MealFilter.get(localDate)) {
-                result.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(),
-                        exceeded));
-            }
-        }
         return result;
+    }
+
+    private static <K, V> AbstractMap.Entry<K, V> pair(K k, V v) {
+        return new AbstractMap.SimpleImmutableEntry<K, V>(k, v);
     }
 
 
