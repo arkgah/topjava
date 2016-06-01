@@ -43,14 +43,14 @@ public class UserMealsUtilTest {
 
         assertEquals(mealList.size(), res.size());
 
-        int exceededCount = res.stream().map(e -> e.isExceed()).mapToInt(e -> e ? 1 : 0).sum();
+        int exceededCount = res.stream().map(UserMealWithExceed::isExceed).mapToInt(e -> e ? 1 : 0).sum();
         assertEquals(3, exceededCount);
 
         assertTrue(res.stream()
-                .filter(e -> e.getDateTime().getDayOfMonth() == 30).allMatch(e -> e.isExceed() == false));
+                .filter(e -> e.getDateTime().getDayOfMonth() == 30).allMatch(e -> !e.isExceed()));
 
         assertTrue(res.stream()
-                .filter(e -> e.getDateTime().getDayOfMonth() == 31).allMatch(e -> e.isExceed() == true));
+                .filter(e -> e.getDateTime().getDayOfMonth() == 31).allMatch(UserMealWithExceed::isExceed));
 
         res = UserMealsUtil.getFilteredMealsWithExceeded(
             mealList, LocalTime.of(0, 0), LocalTime.of(3,0), 2000

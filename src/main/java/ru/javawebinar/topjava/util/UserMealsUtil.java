@@ -26,8 +26,9 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
         );
-        System.out.println(getFilteredMealsWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0),
-                2000));
+        List<UserMealWithExceed> filteredMealsWithExceeded = getFilteredMealsWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0),
+                2000);
+        filteredMealsWithExceeded.forEach(System.out::println);
     }
 
     /**
@@ -52,19 +53,17 @@ public class UserMealsUtil {
                         userMeal -> userMeal.getDateTime().toLocalDate(),
                         Collectors.collectingAndThen(
                                 Collectors.summingInt(UserMeal::getCalories),
-                                sum -> sum > caloriesPerDay ? true : false
+                                sum -> sum > caloriesPerDay
                         )
                         )
                 );
         // Then filter by the time intervals with following setting of he flag
-        List<UserMealWithExceed> result = mealList
+        return mealList
                 .stream()
                 .filter(e -> TimeUtil.isBetween(e.getDateTime().toLocalTime(), startTime, endTime))
                 .map(e -> new UserMealWithExceed(e.getDateTime(), e.getDescription(), e.getCalories(),
                         mapCaloriesByDate.get(e.getDateTime().toLocalDate())))
                 .collect(Collectors.toList());
-
-        return result;
     }
 
 }
