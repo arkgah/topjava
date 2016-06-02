@@ -41,36 +41,31 @@ public class UserMealsUtil {
      * @return
      */
     public static List<UserMealWithExceed> getFilteredMealsWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        List<UserMealWithExceed> result = new ArrayList<>();
-        Map<LocalDate, Integer> mapDate2Calories = new HashMap<>();
-        Map<LocalDate, List<UserMeal>> mapDate2MealFilter = new HashMap<>();
+
+        Map<LocalDate, Integer> mapCaloriesByDate = new HashMap<>();
+        Map<LocalDate, List<UserMeal>> mapMealFilterByDate = new HashMap<>();
 
         for (UserMeal meal : mealList) {
             LocalDate localDate = meal.getDateTime().toLocalDate();
             LocalTime localTime = meal.getDateTime().toLocalTime();
-            if (!mapDate2Calories.containsKey(localDate)) {
-                mapDate2Calories.put(localDate, meal.getCalories());
-            } else {
-                mapDate2Calories.put(localDate, mapDate2Calories.get(localDate) + meal.getCalories());
-            }
+
+            mapCaloriesByDate.put(localDate, mapCaloriesByDate.getOrDefault(localDate, 0) + meal.getCalories());
 
             if (TimeUtil.isBetween(localTime, startTime, endTime)) {
-                if (!mapDate2MealFilter.containsKey(localDate)) {
-                    mapDate2MealFilter.put(localDate, new ArrayList<>());
-                }
-                mapDate2MealFilter.get(localDate).add(meal);
+                mapMealFilterByDate.getOrDefault(localDate, new ArrayList<>()).add(meal);
             }
         }
 
-        for (LocalDate localDate : mapDate2MealFilter.keySet()) {
+        List<UserMealWithExceed> result = new ArrayList<>();
+        for (LocalDate localDate : mapMealFilterByDate.keySet()) {
             boolean exceeded = false;
-            if (mapDate2Calories.get(localDate) > caloriesPerDay) {
+            if (mapCaloriesByDate.get(localDate) > caloriesPerDay) {
                 exceeded = true;
             } else {
                 exceeded = false;
             }
 
-            for (UserMeal meal : mapDate2MealFilter.get(localDate)) {
+            for (UserMeal meal : mapMealFilterByDate.get(localDate)) {
                 result.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(),
                         exceeded));
             }
