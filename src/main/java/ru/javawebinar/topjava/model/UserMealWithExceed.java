@@ -8,8 +8,6 @@ import java.time.format.DateTimeFormatter;
  * 11.01.2015.
  */
 public class UserMealWithExceed {
-    // Make the single formatter helper field with the format string properly set. And DateTimeFormatter is thread safe
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -37,10 +35,6 @@ public class UserMealWithExceed {
 
     public LocalDateTime getDateTime() {
         return dateTime;
-    }
-
-    public String getDateTimeFormatted() {
-        return DATE_TIME_FORMATTER.format(dateTime);
     }
 
     public String getDescription() {

@@ -5,6 +5,7 @@
   Time: 23:31
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="ru.javawebinar.topjava.util.TimeUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <link rel="stylesheet" href="resources/css/style.css">
@@ -32,7 +33,7 @@
             <c:when test="${meal.isExceed()}"><tr class="exceeded"></c:when>
             <c:otherwise><tr class="normal"></c:otherwise>
         </c:choose>
-        <td><c:out value="${meal.getDateTimeFormatted()}"/></td>
+            <td><c:out value="${TimeUtil.toFormattedDateTime(meal.getDateTime())}"/></td>
         <td><c:out value="${meal.getDescription()}"/></td>
         <td><c:out value="${meal.getCalories()}"/></td>
         <td>Edit</td>
