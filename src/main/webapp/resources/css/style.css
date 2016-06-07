@@ -1,0 +1,7 @@
+tr.normal {
+    color: green;
+}
+
+tr.exceeded {
+    color : red;
+}
