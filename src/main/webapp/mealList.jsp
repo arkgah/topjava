@@ -15,6 +15,13 @@
 <body>
 <h2><a href="index.html">Home</a></h2>
 <h2>Список еды</h2>
+<form method="post" action="meals">
+    <input type="hidden" id="id" name="id" value="0"/>
+    <label for="dateTime">Date Time: </label><input type="text" id="dateTime" name="dateTime"/>
+    <label for="description">Description: </label><input type="text" id="description" name="description"/>
+    <label for="calories">Calories: </label><input type="text" id="calories" name="calories"/>
+    <input type="submit" value="Add"/>
+</form>
 
 <c:set var="meals" value="${requestScope.mealWithExceedList}"/>
 <table>

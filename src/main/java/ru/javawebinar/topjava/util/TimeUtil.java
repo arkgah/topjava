@@ -20,4 +20,8 @@ public class TimeUtil {
             return DATE_TIME_FORMATTER.format(localDateTime);
     }
 
+    public static LocalDateTime toLocalDateTime(String dateTime) {
+        return LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
+    }
+
 }
