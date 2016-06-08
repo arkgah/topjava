@@ -43,8 +43,8 @@
             <td><c:out value="${TimeUtil.toFormattedDateTime(meal.getDateTime())}"/></td>
         <td><c:out value="${meal.getDescription()}"/></td>
         <td><c:out value="${meal.getCalories()}"/></td>
-        <td>Edit</td>
-        <td>Delete</td>
+        <td><a href="">Edit</a></td>
+        <td><a href="meals?action=delete&id=<c:out value="${meal.getId()}"/>">Delete</a></td>
         </tr>
     </c:forEach>
     </tbody>

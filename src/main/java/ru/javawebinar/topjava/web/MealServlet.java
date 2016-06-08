@@ -14,11 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.TimeUtil.toLocalDateTime;
@@ -35,6 +32,13 @@ public class MealServlet extends HttpServlet {
     private UserMealDao dao = new UserMealInMemoryDao();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+        if ("delete".equalsIgnoreCase(action)) {
+            int mealId = Integer.parseInt(request.getParameter("id"));
+            dao.delete(mealId);
+        }
+
         List<UserMeal> mealList = dao.getAllMeals();
         List<UserMealWithExceed> mealWithExceedList = UserMealsUtil.getFilteredWithExceeded(
                 mealList,
