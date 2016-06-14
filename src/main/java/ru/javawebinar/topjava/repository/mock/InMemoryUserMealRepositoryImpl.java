@@ -70,7 +70,7 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     }
 
     private UserMeal init(UserMeal userMeal) {
-        LOG.info("init for user id=" + LoggedUser.id());
+        LOG.debug("init meal=" + userMeal + " + for user id=" + LoggedUser.id());
         return save(LoggedUser.id(), userMeal);
     }
 }
