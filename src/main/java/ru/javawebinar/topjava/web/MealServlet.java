@@ -60,7 +60,7 @@ public class MealServlet extends HttpServlet {
             response.sendRedirect("meals");
         } else if (action.equals("create") || action.equals("update")) {
             final UserMeal meal = action.equals("create") ?
-                    new UserMeal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
+                    new UserMeal(LoggedUser.id(), LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
                     repository.get(LoggedUser.id(), getId(request));
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("mealEdit.jsp").forward(request, response);
