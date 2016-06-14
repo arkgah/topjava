@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -62,7 +63,9 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
         if (!isLoggedUser(userId)) {
             return null;
         }
-        return repository.values();
+        return repository.values().stream()
+                .sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
+                .collect(Collectors.toList());
     }
 
     private boolean isLoggedUser(int userId) {
