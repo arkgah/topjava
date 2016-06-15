@@ -19,6 +19,33 @@
 <section>
     <h2><a href="index.html">Home</a></h2>
     <h3>Meal list</h3>
+
+    <form id="filter" role="form" action="meals" method="post">
+        <div >
+            <label for="beginDate">From Date:</label>
+            <input name="beginDate"  id="beginDate">
+        </div>
+        <div>
+            <label for="endDate">To Date:</label>
+            <input name="endDate" id="endDate">
+        </div>
+        <div >
+            <label for="beginTime">From Time:</label>
+            <input name="beginTime" id="beginTime">
+        </div>
+        <div>
+            <label for="endTime">To Time:</label>
+            <input name="endTime" id="endTime">
+        </div>
+
+        <div >
+            <div >
+                <button type="submit">Filter</button>
+            </div>
+        </div>
+    </form>
+
+
     <a href="meals?action=create">Add Meal</a>
     <hr>
     <table border="1" cellpadding="8" cellspacing="0">
