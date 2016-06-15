@@ -82,7 +82,9 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
         }
         return UserMealsUtil.getFilteredByDateTime(repository.values().stream()
                 .filter(meal -> meal.getUserId().equals(userId))
-                .collect(Collectors.toList()), beginDate, beginTime, endDate, endTime);
+                .collect(Collectors.toList()), beginDate, beginTime, endDate, endTime)
+                .stream().sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
+                .collect(Collectors.toList());
     }
 
     private boolean isLoggedUser(int userId) {

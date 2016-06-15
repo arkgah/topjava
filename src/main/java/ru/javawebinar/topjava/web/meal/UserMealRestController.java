@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.web.meal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.LoggedUser;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.service.UserMealService;
@@ -18,6 +19,7 @@ import java.util.Collection;
  * Arcanum
  * 06.03.2015.
  */
+@Controller
 public class UserMealRestController {
     private static final Logger LOG = LoggerFactory.getLogger(UserMealRestController.class);
 
@@ -50,7 +52,11 @@ public class UserMealRestController {
             LocalDate beginDate, LocalTime beginTime, LocalDate endDate, LocalTime endTime, int calories) {
         LOG.info("getFiltered " + beginDate + " " + beginTime + " " + endDate + " " + endTime + " " + calories);
         return UserMealsUtil.getWithExceeded(
-                service.getFiltered(LoggedUser.id(), beginDate, beginTime, endDate, endTime), calories);
+                service.getFiltered(LoggedUser.id(),
+                        beginDate == null ? LocalDate.MIN : beginDate,
+                        beginTime == null ? LocalTime.MIN : beginTime,
+                        endDate == null ? LocalDate.MAX : endDate,
+                        endTime == null ? LocalTime.MAX : endTime), calories);
     }
 
 
