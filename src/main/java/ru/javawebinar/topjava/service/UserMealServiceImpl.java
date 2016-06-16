@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
+import ru.javawebinar.topjava.to.UserMealWithExceed;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -36,10 +37,11 @@ public class UserMealServiceImpl implements UserMealService {
     }
 
     @Override
-    public Collection<UserMeal> getFiltered(
-            int userId, LocalDate beginDate, LocalTime beginTime, LocalDate endDate, LocalTime endTime) {
+    public Collection<UserMealWithExceed> getFilteredWithExceed(
+            int userId, LocalDate beginDate, LocalTime beginTime, LocalDate endDate, LocalTime endTime, int
+            caloriesPerDay) {
         return ExceptionUtil.checkNotFoundWithId(
-                repository.getFiltered(userId, beginDate, beginTime, endDate, endTime), userId);
+                repository.getFilteredWithExceed(userId, beginDate, beginTime, endDate, endTime, caloriesPerDay), userId);
     }
 
     @Override

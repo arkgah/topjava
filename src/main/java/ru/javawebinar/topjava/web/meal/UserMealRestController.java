@@ -50,13 +50,12 @@ public class UserMealRestController {
 
     public Collection<UserMealWithExceed> getFiltered(
             LocalDate beginDate, LocalTime beginTime, LocalDate endDate, LocalTime endTime, int calories) {
-        LOG.info("getFiltered " + beginDate + " " + beginTime + " " + endDate + " " + endTime + " " + calories);
-        return UserMealsUtil.getWithExceeded(
-                service.getFiltered(LoggedUser.id(),
-                        beginDate == null ? LocalDate.MIN : beginDate,
-                        beginTime == null ? LocalTime.MIN : beginTime,
-                        endDate == null ? LocalDate.MAX : endDate,
-                        endTime == null ? LocalTime.MAX : endTime), calories);
+        LOG.info("getFilteredWithExceed " + beginDate + " " + beginTime + " " + endDate + " " + endTime + " " + calories);
+        return service.getFilteredWithExceed(LoggedUser.id(),
+                beginDate == null ? LocalDate.MIN : beginDate,
+                beginTime == null ? LocalTime.MIN : beginTime,
+                endDate == null ? LocalDate.MAX : endDate,
+                endTime == null ? LocalTime.MAX : endTime, calories);
     }
 
 

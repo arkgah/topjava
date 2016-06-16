@@ -65,17 +65,17 @@ public class MealServlet extends HttpServlet {
             LOG.info("endDate=" + endDateStr);
             String endTimeStr = request.getParameter("endTime");
             LOG.info("endTime=" + endTimeStr);
-            
+
             try {
-                LocalDate beginDate = beginDateStr.isEmpty() ? null :
+                LocalDate beginDate = beginDateStr.isEmpty() ? LocalDate.MIN :
                         LocalDate.parse(beginDateStr, TimeUtil.DATE_FORMATTER);
-                LocalTime beginTime = beginTimeStr.isEmpty() ? null :
+                LocalTime beginTime = beginTimeStr.isEmpty() ? LocalTime.MIN :
                         LocalTime.parse(beginTimeStr, TimeUtil.TIME_FORMATTER);
 
-                LocalDate endDate = endDateStr.isEmpty() ? null :
+                LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX :
                         LocalDate.parse(endDateStr, TimeUtil.DATE_FORMATTER);
 
-                LocalTime endTime = endTimeStr.isEmpty() ? null :
+                LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX :
                         LocalTime.parse(endTimeStr, TimeUtil.TIME_FORMATTER);
                 request.setAttribute("mealList",
                         controller.getFiltered(beginDate, beginTime, endDate, endTime, UserMealsUtil

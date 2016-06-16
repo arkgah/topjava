@@ -20,7 +20,8 @@ public interface UserMealRepository {
 
     Collection<UserMeal> getAll(int userId);
 
-    Collection<UserMeal> getFiltered(
-            int userId, LocalDate beginDate, LocalTime beginTime, LocalDate endDate, LocalTime endTime
+    Collection<UserMealWithExceed> getFilteredWithExceed(
+            int userId, LocalDate beginDate, LocalTime beginTime, LocalDate endDate, LocalTime endTime, int
+            caloriesPerDay
     );
 }

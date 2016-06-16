@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.LoggedUser;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Map;
@@ -75,16 +75,23 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     }
 
     @Override
-    public Collection<UserMeal> getFiltered(int userId, LocalDate beginDate, LocalTime beginTime, LocalDate endDate,
-                                            LocalTime endTime) {
+    public Collection<UserMealWithExceed> getFilteredWithExceed(int userId, LocalDate beginDate, LocalTime beginTime, LocalDate endDate,
+                                                                LocalTime endTime, int caloriesPerDay) {
         if (!isLoggedUser(userId)) {
             return null;
         }
-        return UserMealsUtil.getFilteredByDateTime(repository.values().stream()
-                .filter(meal -> meal.getUserId().equals(userId))
-                .collect(Collectors.toList()), beginDate, beginTime, endDate, endTime)
-                .stream().sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
+        return UserMealsUtil.getFilteredWithExceeded(
+                repository.values().stream()
+                        .filter(meal -> meal.getUserId().equals(userId)).collect(Collectors.toList()),
+                beginTime,
+                endTime,
+                caloriesPerDay
+        ).stream()
+                .filter(um -> um.getDateTime().isAfter(LocalDateTime.of(beginDate, beginTime)))
+                .filter(um -> um.getDateTime().isBefore(LocalDateTime.of(endDate, endTime)))
+                .sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
                 .collect(Collectors.toList());
+
     }
 
     private boolean isLoggedUser(int userId) {
