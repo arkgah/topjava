@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ru.javawebinar.topjava.LoggedUser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,5 +23,17 @@ public class UserServlet extends HttpServlet {
 
 //        request.getRequestDispatcher("/userList.jsp").forward(request, response);
         response.sendRedirect("userList.jsp");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userIdStr = request.getParameter("userSelect");
+        LOG.info("user selected id=" + userIdStr);
+        try {
+            LoggedUser.setId(Integer.valueOf(userIdStr));
+        } catch (NumberFormatException e) {
+            LOG.error("Invalid userId: " + e);
+        }
+        response.sendRedirect("users");
     }
 }
