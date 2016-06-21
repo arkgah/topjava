@@ -42,16 +42,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                </includes>
-            </testResource>
-        </testResources>
     </build>
 
     <dependencies>
