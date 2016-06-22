@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,8 @@ import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -52,7 +55,7 @@ public class UserMealServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void delete() throws Exception {
+    public void testDelete() throws Exception {
         service.delete(MEAL_USER_ID, USER_ID);
         service.get(MEAL_USER_ID, USER_ID);
     }
@@ -68,17 +71,37 @@ public class UserMealServiceTest {
     }
 
     @Test
-    public void getBetweenDateTimes() throws Exception {
+    public void testGetBetweenDateTimes() throws Exception {
+        Collection<UserMeal> meals = service.getBetweenDateTimes(LocalDateTime.MIN, LocalDateTime.MAX, USER_ID);
+        Assert.assertEquals(6, meals.size());
 
+        meals = service.getBetweenDateTimes(LocalDateTime.of(2016, 6, 19, 8, 0), LocalDateTime.of(2016, 6, 19, 10, 0),
+                USER_ID);
+        MATCHER.assertCollectionEquals(Collections.singletonList(MEAL_USER), meals);
+    }
+
+    public void testGetBetweenAlienDateTimes() throws Exception {
+        Collection<UserMeal> meals = service.getBetweenDateTimes(LocalDateTime.MIN, LocalDateTime.MAX, ADMIN_ID);
+        Assert.assertEquals(0, meals.size());
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void testGetAll() throws Exception {
+        Collection<UserMeal> meals = service.getAll(USER_ID);
+        Assert.assertEquals(6, meals.size());
 
+        meals = service.getAll(ADMIN_ID);
+        Assert.assertEquals(3, meals.size());
     }
 
     @Test
-    public void update() throws Exception {
+    public void testAlienGetAll() throws Exception {
+        Collection<UserMeal> meals = service.getAll(1);
+        Assert.assertEquals(0, meals.size());
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
         UserMeal updated = new UserMeal();
         updated.setId(MEAL_USER.getId());
         updated.setDateTime(LocalDateTime.now());
@@ -90,7 +113,7 @@ public class UserMealServiceTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void updateAlien() throws Exception {
+    public void testUpdateAlien() throws Exception {
         UserMeal updated = new UserMeal();
         updated.setId(MEAL_USER.getId());
         updated.setDateTime(LocalDateTime.now());
@@ -101,7 +124,7 @@ public class UserMealServiceTest {
     }
 
     @Test
-    public void save() throws Exception {
+    public void testSave() throws Exception {
         UserMeal newMeal = new UserMeal(LocalDateTime.now(), "New", 777);
         UserMeal created = service.save(newMeal, USER_ID);
         newMeal.setId(created.getId());
