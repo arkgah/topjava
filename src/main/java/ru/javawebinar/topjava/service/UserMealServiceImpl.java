@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
@@ -47,5 +48,10 @@ public class UserMealServiceImpl implements UserMealService {
     @Override
     public UserMeal save(UserMeal meal, int userId) {
         return repository.save(meal, userId);
+    }
+
+    @CacheEvict(value = "meals", allEntries = true)
+    @Override
+    public void evictCache() {
     }
 }
